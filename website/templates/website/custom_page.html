@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ page.title }} | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center">{{ page.title }}</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item">
+                <a href="{% url 'website:home' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page Content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+              {% if page.featured_image %}
+                <div class="text-center mb-4">
+                  <img src="{{ page.featured_image.url }}" alt="{{ page.title }}" class="img-fluid rounded shadow" />
+                </div>
+              {% endif %}
+
+              <div class="content">{{ page.content|safe }}</div>
+
+              {% if page.show_share_buttons %}
+                <div class="mt-5 pt-3 border-top">
+                  <h5 class="mb-3">Share This Page</h5>
+                  <div class="social-share">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="btn btn-outline-primary me-2"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ page.title }}" target="_blank" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ page.title }}" target="_blank" class="btn btn-outline-primary me-2"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                    <a href="mailto:?subject={{ page.title }}&body=Check out this page: {{ request.build_absolute_uri }}" class="btn btn-outline-primary"><i class="fas fa-envelope"></i> Email</a>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if page.show_contact_form %}
+            <div class="card border-0 shadow-sm mt-4">
+              <div class="card-body p-4">
+                <h3 class="mb-4">Contact Us</h3>
+                <form method="post" action="{% url 'website:contact' %}">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="id_name" class="form-label">Name*</label>
+                      <input type="text" name="name" id="id_name" class="form-control" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="id_email" class="form-label">Email*</label>
+                      <input type="email" name="email" id="id_email" class="form-control" required />
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="id_subject" class="form-label">Subject*</label>
+                    <input type="text" name="subject" id="id_subject" class="form-control" value="Inquiry from {{ page.title }} page" required />
+                  </div>
+                  <div class="mb-3">
+                    <label for="id_message" class="form-label">Message*</label>
+                    <textarea name="message" id="id_message" rows="5" class="form-control" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% if related_pages %}
+    <!-- Related Pages -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-4">Related Pages</h2>
+        <div class="row">
+          {% for related_page in related_pages %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 border-0 shadow-sm">
+                {% if related_page.featured_image %}
+                  <img src="{{ related_page.featured_image.url }}" class="card-img-top" alt="{{ related_page.title }}" />
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ related_page.title }}</h5>
+                  <p class="card-text">{{ related_page.meta_description|truncatewords:20 }}</p>
+                  <a href="{% url 'website:custom_page' related_page.slug %}" class="btn btn-sm btn-outline-primary">Read More</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if page.show_cta %}
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white">
+      <div class="container text-center">
+        <h2 class="mb-4">{{ page.cta_title|default:'Ready to Get Started?' }}</h2>
+        <p class="lead mb-4">{{ page.cta_text|default:'Join thousands of satisfied customers today.' }}</p>
+        <a href="{{ page.cta_button_url|default:'#' }}" class="btn btn-light btn-lg px-4">{{ page.cta_button_text|default:'Get Started' }}</a>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

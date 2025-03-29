@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Balance Sheet{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Balance Sheet</h1>
+    <div>
+      <button onclick="window.print()" class="btn btn-outline-secondary">Print Report</button>
+      <a href="{% url 'accounting:dashboard' %}" class="btn btn-outline-primary">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-3">
+        <div class="col-md-5">
+          <label for="fiscalYear" class="form-label">Fiscal Year</label>
+          <select class="form-select" id="fiscalYear" name="fiscal_year">
+            {% for year in fiscal_years %}
+              <option value="{{ year.id }}" {% if year.id == selected_fiscal_year.id %}selected{% endif %}>
+                {{ year.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-5">
+          <label for="period" class="form-label">Period</label>
+          <select class="form-select" id="period" name="period">
+            <option value="current" {% if period == 'current' %}selected{% endif %}>Current</option>
+            {% for p in financial_periods %}
+              <option value="{{ p.id }}" {% if period == p.id|stringformat:"i" %}selected{% endif %}>
+                {{ p.name }} ({{ p.start_date|date:"M d" }} - {{ p.end_date|date:"M d, Y" }})
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Generate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">{{ company_name }} - Balance Sheet</h5>
+        <span>As of {{ report_date|date:"F d, Y" }}</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <!-- ASSETS -->
+          <h4 class="border-bottom pb-2 mb-3">Assets</h4>
+          
+          <!-- Current Assets -->
+          <h5 class="fw-bold mb-3">Current Assets</h5>
+          {% for account in assets %}
+            {% if account.is_current_asset %}
+              <div class="row mb-2 {% if account.is_parent %}fw-bold{% endif %}">
+                <div class="col-8 {% if not account.is_parent %}ps-4{% endif %}">
+                  {{ account.name }}
+                </div>
+                <div class="col-4 text-end">
+                  {{ account.balance|floatformat:2 }}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+          
+          <div class="row mb-3 fw-bold border-top pt-2">
+            <div class="col-8">Total Current Assets</div>
+            <div class="col-4 text-end">{{ total_current_assets|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Non-Current Assets -->
+          <h5 class="fw-bold mb-3">Non-Current Assets</h5>
+          {% for account in assets %}
+            {% if not account.is_current_asset %}
+              <div class="row mb-2 {% if account.is_parent %}fw-bold{% endif %}">
+                <div class="col-8 {% if not account.is_parent %}ps-4{% endif %}">
+                  {{ account.name }}
+                </div>
+                <div class="col-4 text-end">
+                  {{ account.balance|floatformat:2 }}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+          
+          <div class="row mb-3 fw-bold border-top pt-2">
+            <div class="col-8">Total Non-Current Assets</div>
+            <div class="col-4 text-end">{{ total_noncurrent_assets|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Total Assets -->
+          <div class="row fw-bold fs-5 border-top border-bottom py-2 mb-5">
+            <div class="col-8">TOTAL ASSETS</div>
+            <div class="col-4 text-end">{{ total_assets|floatformat:2 }}</div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <!-- LIABILITIES AND EQUITY -->
+          <h4 class="border-bottom pb-2 mb-3">Liabilities and Equity</h4>
+          
+          <!-- Current Liabilities -->
+          <h5 class="fw-bold mb-3">Current Liabilities</h5>
+          {% for account in liabilities %}
+            {% if account.is_current_liability %}
+              <div class="row mb-2 {% if account.is_parent %}fw-bold{% endif %}">
+                <div class="col-8 {% if not account.is_parent %}ps-4{% endif %}">
+                  {{ account.name }}
+                </div>
+                <div class="col-4 text-end">
+                  {{ account.balance|floatformat:2 }}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+          
+          <div class="row mb-3 fw-bold border-top pt-2">
+            <div class="col-8">Total Current Liabilities</div>
+            <div class="col-4 text-end">{{ total_current_liabilities|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Non-Current Liabilities -->
+          <h5 class="fw-bold mb-3">Non-Current Liabilities</h5>
+          {% for account in liabilities %}
+            {% if not account.is_current_liability %}
+              <div class="row mb-2 {% if account.is_parent %}fw-bold{% endif %}">
+                <div class="col-8 {% if not account.is_parent %}ps-4{% endif %}">
+                  {{ account.name }}
+                </div>
+                <div class="col-4 text-end">
+                  {{ account.balance|floatformat:2 }}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+          
+          <div class="row mb-3 fw-bold border-top pt-2">
+            <div class="col-8">Total Non-Current Liabilities</div>
+            <div class="col-4 text-end">{{ total_noncurrent_liabilities|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Total Liabilities -->
+          <div class="row fw-bold border-top pt-2 mb-3">
+            <div class="col-8">TOTAL LIABILITIES</div>
+            <div class="col-4 text-end">{{ total_liabilities|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Equity -->
+          <h5 class="fw-bold mb-3">Equity</h5>
+          {% for account in equity %}
+            <div class="row mb-2 {% if account.is_parent %}fw-bold{% endif %}">
+              <div class="col-8 {% if not account.is_parent %}ps-4{% endif %}">
+                {{ account.name }}
+              </div>
+              <div class="col-4 text-end">
+                {{ account.balance|floatformat:2 }}
+              </div>
+            </div>
+          {% endfor %}
+          
+          <!-- Retained Earnings -->
+          <div class="row mb-2">
+            <div class="col-8">Retained Earnings</div>
+            <div class="col-4 text-end">{{ retained_earnings|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Current Year Earnings -->
+          <div class="row mb-2">
+            <div class="col-8">Current Year Earnings</div>
+            <div class="col-4 text-end">{{ current_year_earnings|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Total Equity -->
+          <div class="row mb-3 fw-bold border-top pt-2">
+            <div class="col-8">TOTAL EQUITY</div>
+            <div class="col-4 text-end">{{ total_equity|floatformat:2 }}</div>
+          </div>
+          
+          <!-- Total Liabilities and Equity -->
+          <div class="row fw-bold fs-5 border-top border-bottom py-2">
+            <div class="col-8">TOTAL LIABILITIES AND EQUITY</div>
+            <div class="col-4 text-end">{{ total_liabilities_and_equity|floatformat:2 }}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center text-muted mt-4">
+        <p>Generated on {{ report_generated_at|date:"F d, Y H:i" }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css" media="print">
+  @page {
+    size: portrait;
+    margin: 1cm;
+  }
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  .card {
+    border: none;
+  }
+  .card-header, .btn, form {
+    display: none;
+  }
+</style>
+{% endblock %} 

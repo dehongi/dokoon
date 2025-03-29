@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Thank You | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center">Thank You</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item">
+                <a href="{% url 'website:home' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url 'website:contact' %}">Contact</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Thank You</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Thank You Content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body py-5">
+              <div class="mb-4">
+                <i class="fas fa-check-circle text-success fa-5x"></i>
+              </div>
+              <h2 class="mb-4">Message Sent Successfully!</h2>
+              <p class="lead mb-4">Thank you for contacting us. We have received your message and will respond to your inquiry as soon as possible.</p>
+              <p class="mb-4">Our team typically responds within 24-48 business hours.</p>
+              <div class="d-flex justify-content-center gap-3 mt-4">
+                <a href="{% url 'website:home' %}" class="btn btn-primary">Return to Home</a>
+                <a href="{% url 'shop:product_list' %}" class="btn btn-outline-primary">Shop Our Products</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs Link -->
+  <section class="py-5 bg-light">
+    <div class="container text-center">
+      <h3>Have More Questions?</h3>
+      <p class="lead mb-4">While you wait for our response, you might find answers in our FAQs.</p>
+      <a href="{% url 'website:faq' %}" class="btn btn-outline-primary btn-lg">View FAQs</a>
+    </div>
+  </section>
+{% endblock %}

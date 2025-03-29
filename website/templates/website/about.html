@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  About Us | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center">About Us</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item">
+                <a href="{% url 'website:home' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">About Us</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Overview -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          {% if site_settings.about_image %}
+            <img src="{{ site_settings.about_image.url }}" alt="About Us" class="img-fluid rounded shadow" />
+          {% else %}
+            <div class="bg-light p-5 rounded text-center">
+              <i class="fas fa-building fa-5x text-primary mb-3"></i>
+              <h3>Company Image</h3>
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-lg-6">
+          <h2>{{ site_settings.about_title|default:'Our Story' }}</h2>
+          <div class="my-4">{{ site_settings.about_content|default:'<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at lacus fermentum, laoreet dolor non, pellentesque orci. Duis id eros id purus ullamcorper cursus. Vivamus elementum tortor in erat semper, vel porttitor nisi tempus.</p><p>Quisque auctor ligula in magna vestibulum, nec blandit eros imperdiet. Ut finibus ex nec ullamcorper placerat. Suspendisse potenti. Proin eget elit id orci aliquet efficitur.</p>'|safe }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-4 mb-md-0">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="text-center mb-4">
+                <i class="fas fa-bullseye fa-3x text-primary"></i>
+              </div>
+              <h3 class="text-center mb-3">Our Mission</h3>
+              <p>{{ site_settings.mission_statement|default:'Our mission is to provide high-quality products at affordable prices, with exceptional customer service. We strive to make the shopping experience simple, enjoyable, and rewarding for all our customers.' }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="text-center mb-4">
+                <i class="fas fa-eye fa-3x text-primary"></i>
+              </div>
+              <h3 class="text-center mb-3">Our Vision</h3>
+              <p>{{ site_settings.vision_statement|default:'We envision becoming the preferred online shopping destination, known for our product quality, competitive pricing, and outstanding customer care. We aim to expand our product range and reach more customers globally.' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Members -->
+  {% if team_members %}
+    <section class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-5">Meet Our Team</h2>
+        <div class="row">
+          {% for member in team_members %}
+            <div class="col-md-3 mb-4">
+              <div class="card h-100 border-0 shadow-sm text-center">
+                {% if member.image %}
+                  <img src="{{ member.image.url }}" class="card-img-top mx-auto mt-4" alt="{{ member.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;" />
+                {% else %}
+                  <div class="mx-auto mt-4 rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style="width: 150px; height: 150px;">
+                    <i class="fas fa-user fa-4x"></i>
+                  </div>
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ member.name }}</h5>
+                  <p class="card-text text-muted">{{ member.position }}</p>
+                  <p class="card-text">{{ member.bio }}</p>
+                  <div class="mt-3">
+                    {% if member.linkedin %}
+                      <a href="{{ member.linkedin }}" class="me-2" target="_blank"><i class="fab fa-linkedin fa-lg"></i></a>
+                    {% endif %}
+                    {% if member.twitter %}
+                      <a href="{{ member.twitter }}" class="me-2" target="_blank"><i class="fab fa-twitter fa-lg"></i></a>
+                    {% endif %}
+                    {% if member.email %}
+                      <a href="mailto:{{ member.email }}"><i class="fas fa-envelope fa-lg"></i></a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- Values -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5">Our Core Values</h2>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-award fa-3x text-primary"></i>
+              </div>
+              <h4>Quality</h4>
+              <p>We are committed to offering only the highest quality products that meet rigorous standards.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-handshake fa-3x text-primary"></i>
+              </div>
+              <h4>Integrity</h4>
+              <p>We operate with honesty, transparency, and ethical business practices in all we do.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-heart fa-3x text-primary"></i>
+              </div>
+              <h4>Customer Focus</h4>
+              <p>We put our customers at the center of everything we do, striving to exceed expectations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+      <h2 class="mb-4">Ready to Shop With Us?</h2>
+      <p class="lead mb-4">Explore our wide range of products and experience the difference.</p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'shop:product_list' %}" class="btn btn-light btn-lg px-4">Shop Now</a>
+        <a href="{% url 'website:contact' %}" class="btn btn-outline-light btn-lg px-4">Contact Us</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

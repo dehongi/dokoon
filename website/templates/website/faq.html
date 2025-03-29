@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  FAQ | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center">Frequently Asked Questions</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item">
+                <a href="{% url 'website:home' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">FAQ</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <!-- Search FAQs -->
+          <div class="card border-0 shadow-sm mb-5">
+            <div class="card-body">
+              <form id="faq-search-form">
+                <div class="input-group">
+                  <input type="text" id="faq-search" class="form-control" placeholder="Search FAQs..." />
+                  <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- FAQ Categories -->
+          {% if faq_categories %}
+            <ul class="nav nav-pills justify-content-center mb-5" id="faq-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All FAQs</button>
+              </li>
+              {% for category in faq_categories %}
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="{{ category.slug }}-tab" data-bs-toggle="pill" data-bs-target="#{{ category.slug }}" type="button" role="tab" aria-controls="{{ category.slug }}" aria-selected="false">{{ category.name }}</button>
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="tab-content" id="faq-content">
+              <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                <div class="accordion" id="faqAccordionAll">
+                  {% for faq in faqs %}
+                    <div class="accordion-item border-0 mb-3 faq-item" data-categories="{{ faq.categories.all|join:' ' }}">
+                      <h2 class="accordion-header" id="heading-all-{{ faq.id }}"><button class="accordion-button collapsed shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-all-{{ faq.id }}" aria-expanded="false" aria-controls="collapse-all-{{ faq.id }}">{{ faq.question }}</button></h2>
+                      <div id="collapse-all-{{ faq.id }}" class="accordion-collapse collapse" aria-labelledby="heading-all-{{ faq.id }}" data-bs-parent="#faqAccordionAll">
+                        <div class="accordion-body border shadow-sm rounded-bottom">{{ faq.answer|safe }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              {% for category in faq_categories %}
+                <div class="tab-pane fade" id="{{ category.slug }}" role="tabpanel" aria-labelledby="{{ category.slug }}-tab">
+                  <div class="accordion" id="faqAccordion{{ category.slug|title }}">
+                    {% for faq in category.faqs.all %}
+                      <div class="accordion-item border-0 mb-3 faq-item">
+                        <h2 class="accordion-header" id="heading-{{ category.slug }}-{{ faq.id }}"><button class="accordion-button collapsed shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ category.slug }}-{{ faq.id }}" aria-expanded="false" aria-controls="collapse-{{ category.slug }}-{{ faq.id }}">{{ faq.question }}</button></h2>
+                        <div id="collapse-{{ category.slug }}-{{ faq.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ category.slug }}-{{ faq.id }}" data-bs-parent="#faqAccordion{{ category.slug|title }}">
+                          <div class="accordion-body border shadow-sm rounded-bottom">{{ faq.answer|safe }}</div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <!-- If no categories, just show all FAQs -->
+            <div class="accordion" id="faqAccordion">
+              {% for faq in faqs %}
+                <div class="accordion-item border-0 mb-3 faq-item">
+                  <h2 class="accordion-header" id="heading{{ faq.id }}"><button class="accordion-button collapsed shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ faq.id }}" aria-expanded="false" aria-controls="collapse{{ faq.id }}">{{ faq.question }}</button></h2>
+                  <div id="collapse{{ faq.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ faq.id }}" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body border shadow-sm rounded-bottom">{{ faq.answer|safe }}</div>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="alert alert-info">No FAQs available at the moment. Please check back later.</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Couldn't Find Answer -->
+  <section class="py-5 bg-light">
+    <div class="container text-center">
+      <h3>Couldn't Find What You're Looking For?</h3>
+      <p class="lead mb-4">If you have any other questions, feel free to contact us directly.</p>
+      <a href="{% url 'website:contact' %}" class="btn btn-primary btn-lg">Contact Us</a>
+    </div>
+  </section>
+
+  {% block extra_js %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // FAQ Search functionality
+        const searchInput = document.getElementById('faq-search')
+        const faqItems = document.querySelectorAll('.faq-item')
+      
+        document.getElementById('faq-search-form').addEventListener('submit', function (e) {
+          e.preventDefault()
+          const searchTerm = searchInput.value.toLowerCase()
+      
+          if (searchTerm.trim() === '') {
+            faqItems.forEach((item) => {
+              item.style.display = 'block'
+            })
+            return
+          }
+      
+          faqItems.forEach((item) => {
+            const question = item.querySelector('.accordion-button').textContent.toLowerCase()
+            const answer = item.querySelector('.accordion-body').textContent.toLowerCase()
+      
+            if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+              item.style.display = 'block'
+      
+              // If it's hidden in a collapsed state, expand it
+              const accordionButton = item.querySelector('.accordion-button')
+              const accordionCollapse = item.querySelector('.accordion-collapse')
+      
+              if (accordionButton.classList.contains('collapsed')) {
+                accordionButton.classList.remove('collapsed')
+                accordionButton.setAttribute('aria-expanded', 'true')
+                accordionCollapse.classList.add('show')
+              }
+            } else {
+              item.style.display = 'none'
+            }
+          })
+        })
+      
+        // Clear search when focus on search box
+        searchInput.addEventListener('focus', function () {
+          this.value = ''
+          faqItems.forEach((item) => {
+            item.style.display = 'block'
+      
+            // Reset accordion state
+            const accordionButton = item.querySelector('.accordion-button')
+            const accordionCollapse = item.querySelector('.accordion-collapse')
+      
+            if (!accordionButton.classList.contains('collapsed')) {
+              accordionButton.classList.add('collapsed')
+              accordionButton.setAttribute('aria-expanded', 'false')
+              accordionCollapse.classList.remove('show')
+            }
+          })
+        })
+      })
+    </script>
+  {% endblock %}
+{% endblock %}

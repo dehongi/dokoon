@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Home | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="display-4 fw-bold mb-4">{{ site_settings.hero_title|default:'Welcome to Our Store' }}</h1>
+          <p class="lead mb-4">{{ site_settings.hero_subtitle|default:'Discover premium products at affordable prices. Shop with confidence and enjoy our excellent customer service.' }}</p>
+          <div class="d-grid gap-2 d-sm-flex">
+            <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg px-4 me-md-2">Shop Now</a>
+            <a href="{% url 'website:about' %}" class="btn btn-outline-secondary btn-lg px-4">Learn More</a>
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block">
+          {% if site_settings.hero_image %}
+            <img src="{{ site_settings.hero_image.url }}" alt="Hero Image" class="img-fluid rounded shadow" />
+          {% else %}
+            <div class="bg-light p-5 rounded text-center">
+              <i class="fas fa-store fa-5x text-primary mb-3"></i>
+              <h3>Shop Image</h3>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Banners -->
+  {% if banners %}
+    <section class="py-5">
+      <div class="container">
+        <div class="row">
+          {% for banner in banners %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 border-0 shadow-sm">
+                {% if banner.image %}
+                  <img src="{{ banner.image.url }}" class="card-img-top" alt="{{ banner.title }}" />
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ banner.title }}</h5>
+                  <p class="card-text">{{ banner.subtitle }}</p>
+                  {% if banner.button_text and banner.link_url %}
+                    <a href="{{ banner.link_url }}" class="btn btn-primary">{{ banner.button_text }}</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- Featured Products -->
+  {% if featured_products %}
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-5">Featured Products</h2>
+        <div class="row">
+          {% for product in featured_products %}
+            <div class="col-md-3 mb-4">
+              <div class="card h-100 border-0 shadow-sm">
+                {% if product.image %}
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" />
+                {% else %}
+                  <div class="bg-secondary p-4 text-white text-center">
+                    <i class="fas fa-image fa-3x mb-2"></i>
+                    <p>No Image</p>
+                  </div>
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                  <p class="card-text text-muted">{{ product.price_display }}</p>
+                  <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+          <a href="{% url 'shop:product_list' %}" class="btn btn-primary">View All Products</a>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- Testimonials -->
+  {% if testimonials %}
+    <section class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-5">What Our Customers Say</h2>
+        <div class="row">
+          {% for testimonial in testimonials %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                  <div class="mb-3">
+                    {% for i in 12345 %}
+                      <i class="fas fa-star {% if forloop.counter <= testimonial.rating %}
+                          
+                          text-warning
+
+                        {% else %}
+                          
+                          text-muted
+
+                        {% endif %}">
+
+                      </i>
+                    {% endfor %}
+                  </div>
+                  <p class="card-text font-italic">"{{ testimonial.content }}"</p>
+                  <div class="d-flex align-items-center mt-3">
+                    {% if testimonial.image %}
+                      <img src="{{ testimonial.image.url }}" class="rounded-circle me-3" width="50" height="50" alt="{{ testimonial.name }}" />
+                    {% else %}
+                      <div class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
+                        <i class="fas fa-user"></i>
+                      </div>
+                    {% endif %}
+                    <div>
+                      <h6 class="mb-0">{{ testimonial.name }}</h6>
+                      {% if testimonial.position %}
+                        <small class="text-muted">{{ testimonial.position }}</small>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- Latest Blog Posts -->
+  {% if latest_posts %}
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-5">Latest From Our Blog</h2>
+        <div class="row">
+          {% for post in latest_posts %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100 border-0 shadow-sm">
+                {% if post.featured_image %}
+                  <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}" />
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ post.title }}</h5>
+                  <p class="card-text text-muted">{{ post.created_at|date:'F j, Y' }}</p>
+                  <p class="card-text">{{ post.excerpt }}</p>
+                  <a href="{{ post.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Read More</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+          <a href="{% url 'blog:post_list' %}" class="btn btn-primary">View All Posts</a>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- Call to Action -->
+  <section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+      <h2 class="mb-4">{{ site_settings.cta_title|default:'Ready to Start Shopping?' }}</h2>
+      <p class="lead mb-4">{{ site_settings.cta_subtitle|default:'Join thousands of satisfied customers and experience our quality products.' }}</p>
+      <a href="{% url 'shop:product_list' %}" class="btn btn-light btn-lg px-4">Shop Now</a>
+    </div>
+  </section>
+{% endblock %}

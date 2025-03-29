@@ -1,0 +1,416 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Help Center | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center">Help Center</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item">
+                <a href="{% url 'website:home' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Help Center</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Help Topics -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 mb-4 mb-lg-0">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h5 class="mb-3">Help Topics</h5>
+              <div class="list-group list-group-flush" id="help-tabs" role="tablist">
+                <a class="list-group-item list-group-item-action active" id="getting-started-tab" data-bs-toggle="list" href="#getting-started" role="tab" aria-controls="getting-started">Getting Started</a>
+                <a class="list-group-item list-group-item-action" id="account-tab" data-bs-toggle="list" href="#account" role="tab" aria-controls="account">Account Management</a>
+                <a class="list-group-item list-group-item-action" id="orders-tab" data-bs-toggle="list" href="#orders" role="tab" aria-controls="orders">Orders & Shipping</a>
+                <a class="list-group-item list-group-item-action" id="payment-tab" data-bs-toggle="list" href="#payment" role="tab" aria-controls="payment">Payment Methods</a>
+                <a class="list-group-item list-group-item-action" id="returns-tab" data-bs-toggle="list" href="#returns" role="tab" aria-controls="returns">Returns & Refunds</a>
+                <a class="list-group-item list-group-item-action" id="troubleshooting-tab" data-bs-toggle="list" href="#troubleshooting" role="tab" aria-controls="troubleshooting">Troubleshooting</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body">
+              <h5 class="mb-3">Need More Help?</h5>
+              <p>Contact our customer support team for assistance</p>
+              <a href="{% url 'website:contact' %}" class="btn btn-primary w-100">Contact Us</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+              <div class="tab-content" id="help-content">
+                <!-- Getting Started -->
+                <div class="tab-pane fade show active" id="getting-started" role="tabpanel" aria-labelledby="getting-started-tab">
+                  <h3 class="mb-4">Getting Started with Our Store</h3>
+
+                  <div class="mb-4">
+                    <h5>Welcome to Our Online Store!</h5>
+                    <p>We're excited to have you here. This guide will help you navigate our website and make your shopping experience smooth and enjoyable.</p>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Creating an Account</h5>
+                    <p>Creating an account allows you to track orders, save favorite products, and check out faster. Here's how:</p>
+                    <ol>
+                      <li>Click on the "Register" link in the top navigation bar</li>
+                      <li>Fill in your details in the registration form</li>
+                      <li>Verify your email address through the link we send you</li>
+                      <li>Log in with your new credentials</li>
+                    </ol>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Browsing Products</h5>
+                    <p>You can browse our catalog in several ways:</p>
+                    <ul>
+                      <li>Use the search bar at the top of the page to find specific items</li>
+                      <li>Navigate through category links in the main menu</li>
+                      <li>Check out featured products on our homepage</li>
+                      <li>Browse collections and special offers</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h5>Making Your First Purchase</h5>
+                    <p>Ready to make a purchase? Here's what to do:</p>
+                    <ol>
+                      <li>Add items to your cart by clicking the "Add to Cart" button on product pages</li>
+                      <li>Review your cart by clicking the cart icon in the top navigation</li>
+                      <li>Proceed to checkout and fill in your shipping and payment information</li>
+                      <li>Review your order and submit</li>
+                      <li>You'll receive an order confirmation email with details</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <!-- Account Management -->
+                <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
+                  <h3 class="mb-4">Account Management</h3>
+
+                  <div class="mb-4">
+                    <h5>Managing Your Profile</h5>
+                    <p>You can update your personal information, including name, email, and password, from your account dashboard.</p>
+                    <ol>
+                      <li>Log in to your account</li>
+                      <li>Go to "My Profile" or "Account Settings"</li>
+                      <li>Make your changes and save</li>
+                    </ol>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Managing Addresses</h5>
+                    <p>Add, edit, or remove shipping and billing addresses:</p>
+                    <ol>
+                      <li>Go to "My Addresses" in your account dashboard</li>
+                      <li>Click "Add New Address" or edit existing ones</li>
+                      <li>Fill in the address form and save</li>
+                    </ol>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Viewing Order History</h5>
+                    <p>Access your past orders and their statuses:</p>
+                    <ol>
+                      <li>Go to "Order History" in your account menu</li>
+                      <li>Click on an order number to view details</li>
+                      <li>From there, you can track shipments or request returns</li>
+                    </ol>
+                  </div>
+
+                  <div>
+                    <h5>Password Recovery</h5>
+                    <p>If you forget your password:</p>
+                    <ol>
+                      <li>Click "Login" in the top navigation</li>
+                      <li>Select "Forgot your password?"</li>
+                      <li>Enter your email address</li>
+                      <li>Follow the instructions in the password reset email</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <!-- Orders & Shipping -->
+                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                  <h3 class="mb-4">Orders & Shipping</h3>
+
+                  <div class="mb-4">
+                    <h5>Checking Order Status</h5>
+                    <p>To check the status of your order:</p>
+                    <ol>
+                      <li>Log in to your account</li>
+                      <li>Go to "Order History"</li>
+                      <li>Find your order and click on it to view details</li>
+                      <li>The current status will be displayed prominently</li>
+                    </ol>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Shipping Methods</h5>
+                    <p>We offer several shipping options:</p>
+                    <ul>
+                      <li>
+                        <strong>Standard Shipping:</strong> 3-5 business days
+                      </li>
+                      <li>
+                        <strong>Express Shipping:</strong> 1-2 business days
+                      </li>
+                      <li>
+                        <strong>Same-Day Delivery:</strong> Available in select areas
+                      </li>
+                    </ul>
+                    <p>Shipping costs vary based on location, order weight, and chosen method.</p>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Tracking Shipments</h5>
+                    <p>Once your order ships, you can track it:</p>
+                    <ol>
+                      <li>Go to "Order History" in your account</li>
+                      <li>Click on the shipped order</li>
+                      <li>Click the tracking number or "Track Shipment" button</li>
+                      <li>You'll be redirected to the carrier's tracking page</li>
+                    </ol>
+                  </div>
+
+                  <div>
+                    <h5>International Shipping</h5>
+                    <p>We ship to many countries worldwide. Please note:</p>
+                    <ul>
+                      <li>International shipping times vary by destination</li>
+                      <li>Import duties and taxes are the responsibility of the recipient</li>
+                      <li>Some products may not be available for international shipping due to regulations</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+                  <h3 class="mb-4">Payment Methods</h3>
+
+                  <div class="mb-4">
+                    <h5>Accepted Payment Methods</h5>
+                    <p>We accept the following payment options:</p>
+                    <ul>
+                      <li>Credit/Debit Cards (Visa, MasterCard, American Express, Discover)</li>
+                      <li>PayPal</li>
+                      <li>Apple Pay and Google Pay</li>
+                      <li>Bank transfers</li>
+                      <li>Store credit and gift cards</li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Payment Security</h5>
+                    <p>Your payment information is always secure:</p>
+                    <ul>
+                      <li>All transactions are encrypted using SSL technology</li>
+                      <li>We comply with PCI DSS standards</li>
+                      <li>We never store your full credit card information</li>
+                      <li>We use fraud detection and prevention systems</li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Managing Saved Payment Methods</h5>
+                    <p>To manage your saved payment methods:</p>
+                    <ol>
+                      <li>Log in to your account</li>
+                      <li>Go to "Payment Methods" in your account dashboard</li>
+                      <li>Add new methods or remove existing ones</li>
+                      <li>Set a default payment method if desired</li>
+                    </ol>
+                  </div>
+
+                  <div>
+                    <h5>Gift Cards and Store Credit</h5>
+                    <p>To use or check the balance of gift cards or store credit:</p>
+                    <ol>
+                      <li>Go to "Gift Cards" in your account section</li>
+                      <li>Enter your gift card number and PIN</li>
+                      <li>The balance will be applied to your account</li>
+                      <li>You can use it during checkout by selecting "Store Credit" as your payment method</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <!-- Returns & Refunds -->
+                <div class="tab-pane fade" id="returns" role="tabpanel" aria-labelledby="returns-tab">
+                  <h3 class="mb-4">Returns & Refunds</h3>
+
+                  <div class="mb-4">
+                    <h5>Return Policy</h5>
+                    <p>We want you to be completely satisfied with your purchase. Our return policy includes:</p>
+                    <ul>
+                      <li>30-day return window for most items</li>
+                      <li>Items must be unused and in original packaging</li>
+                      <li>Some products (e.g., personalized items) may not be eligible for return</li>
+                      <li>Return shipping fees may apply unless the item is defective</li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>How to Return an Item</h5>
+                    <p>To initiate a return:</p>
+                    <ol>
+                      <li>Log in to your account</li>
+                      <li>Go to "Order History" and find the order</li>
+                      <li>Click "Return Items" and follow the instructions</li>
+                      <li>Print the return label (if provided) and packing slip</li>
+                      <li>Package the item securely with all original materials</li>
+                      <li>Ship the package using the method specified</li>
+                    </ol>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Refund Process</h5>
+                    <p>Once we receive your return:</p>
+                    <ul>
+                      <li>We inspect the item to ensure it meets return conditions</li>
+                      <li>Approved refunds are processed within 3-5 business days</li>
+                      <li>Refunds are issued to the original payment method</li>
+                      <li>You'll receive an email notification when your refund is processed</li>
+                    </ul>
+                    <p>Please note: It may take an additional 3-10 business days for the refund to appear in your account, depending on your payment provider.</p>
+                  </div>
+
+                  <div>
+                    <h5>Exchanges</h5>
+                    <p>If you need a different size, color, or model:</p>
+                    <ol>
+                      <li>Start a return request as described above</li>
+                      <li>Select "Exchange" instead of "Return"</li>
+                      <li>Choose the replacement item specifications</li>
+                      <li>Ship the original item back</li>
+                      <li>We'll ship the exchange item once we receive and process your return</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <!-- Troubleshooting -->
+                <div class="tab-pane fade" id="troubleshooting" role="tabpanel" aria-labelledby="troubleshooting-tab">
+                  <h3 class="mb-4">Troubleshooting</h3>
+
+                  <div class="mb-4">
+                    <h5>Website Issues</h5>
+                    <p>If you're experiencing problems with our website:</p>
+                    <ul>
+                      <li>Clear your browser cache and cookies</li>
+                      <li>Try using a different browser</li>
+                      <li>Make sure your browser is updated to the latest version</li>
+                      <li>Check your internet connection</li>
+                      <li>Disable browser extensions that might interfere with the site</li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Payment Problems</h5>
+                    <p>If your payment is declined:</p>
+                    <ul>
+                      <li>Verify that your payment information is correct</li>
+                      <li>Check with your bank to ensure there are no holds on your account</li>
+                      <li>Try using a different payment method</li>
+                      <li>Ensure your billing address matches what's on file with your payment provider</li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-4">
+                    <h5>Login Issues</h5>
+                    <p>If you can't log in to your account:</p>
+                    <ol>
+                      <li>Use the "Forgot Password" link to reset your password</li>
+                      <li>Check that you're using the correct email address</li>
+                      <li>Ensure that Caps Lock is not enabled</li>
+                      <li>Clear browser cookies and try again</li>
+                    </ol>
+                  </div>
+
+                  <div>
+                    <h5>Missing Order or Wrong Items</h5>
+                    <p>If your order is missing or you received incorrect items:</p>
+                    <ol>
+                      <li>Check your order confirmation email to verify what was ordered</li>
+                      <li>Verify the delivery address on your order</li>
+                      <li>Check all packaging thoroughly - small items might be overlooked</li>
+                      <li>Contact customer service with your order number and details of the issue</li>
+                      <li>We'll work with you to resolve the situation promptly</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Us -->
+  <section class="py-5 bg-light">
+    <div class="container text-center">
+      <h3>Still Need Help?</h3>
+      <p class="lead mb-4">Our customer support team is ready to assist you with any questions or concerns.</p>
+      <div class="row justify-content-center">
+        <div class="col-md-4 mb-3 mb-md-0">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
+              <h5>Email Support</h5>
+              <p>
+                {% if site_settings.contact_email %}
+                  <a href="mailto:{{ site_settings.contact_email }}">{{ site_settings.contact_email }}</a>
+                {% else %}
+                  <a href="mailto:support@example.com">support@example.com</a>
+                {% endif %}
+              </p>
+              <p class="text-muted">Response within 24 hours</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <i class="fas fa-phone fa-3x text-primary mb-3"></i>
+              <h5>Phone Support</h5>
+              <p>
+                {% if site_settings.contact_phone %}
+                  {{ site_settings.contact_phone }}
+                {% else %}
+                  (123) 456-7890
+                {% endif %}
+              </p>
+              <p class="text-muted">Mon-Fri: 9am - 5pm</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <i class="fas fa-comments fa-3x text-primary mb-3"></i>
+              <h5>Live Chat</h5>
+              <p>Chat with our support team</p>
+              <p class="text-muted">Available during business hours</p>
+              <button class="btn btn-primary mt-2">Start Chat</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

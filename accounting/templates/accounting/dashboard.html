@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Accounting Dashboard
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="mb-4">Accounting Dashboard</h1>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Fiscal Year Information</h5>
+          </div>
+          <div class="card-body">
+            {% if current_fiscal_year %}
+              <h6>{{ current_fiscal_year.name }}</h6>
+              <p>{{ current_fiscal_year.start_date|date:'M d, Y' }} - {{ current_fiscal_year.end_date|date:'M d, Y' }}</p>
+              <p class="badge {% if current_fiscal_year.is_active %}
+                  bg-success
+                {% else %}
+                  bg-danger
+                {% endif %}">{{ current_fiscal_year.is_active|yesno:'Active,Closed' }}</p>
+            {% else %}
+              <p>No active fiscal year found.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Account Summary</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card mb-2">
+                  <div class="card-body text-center">
+                    <h6>Total Assets</h6>
+                    <h4>{{ total_assets|floatformat:2 }}</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card mb-2">
+                  <div class="card-body text-center">
+                    <h6>Total Liabilities</h6>
+                    <h4>{{ total_liabilities|floatformat:2 }}</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card mb-2">
+                  <div class="card-body text-center">
+                    <h6>Equity</h6>
+                    <h4>{{ total_equity|floatformat:2 }}</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <div class="card mb-2">
+                  <div class="card-body text-center">
+                    <h6>Total Revenue</h6>
+                    <h4>{{ total_revenue|floatformat:2 }}</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card mb-2">
+                  <div class="card-body text-center">
+                    <h6>Total Expenses</h6>
+                    <h4>{{ total_expenses|floatformat:2 }}</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Recent Journal Entries</h5>
+            <a href="{% url 'accounting:journal_entry_list' %}" class="btn btn-sm btn-light">View All</a>
+          </div>
+          <div class="card-body">
+            {% if recent_journal_entries %}
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Reference</th>
+                      <th>Journal</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for entry in recent_journal_entries %}
+                      <tr>
+                        <td>{{ entry.date|date:'M d, Y' }}</td>
+                        <td>
+                          <a href="{% url 'accounting:journal_entry_detail' entry.id %}">{{ entry.reference }}</a>
+                        </td>
+                        <td>{{ entry.journal.name }}</td>
+                        <td>{{ entry.total_debit|floatformat:2 }}</td>
+                        <td>
+                          <span class="badge {% if entry.status == 'draft' %}
+                              bg-warning
+                            {% elif entry.status == 'posted' %}
+                              bg-success
+                            {% else %}
+                              bg-secondary
+                            {% endif %}">
+                            {{ entry.get_status_display }}
+                          </span>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p>No recent journal entries found.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Unpaid Bills</h5>
+            <a href="{% url 'accounting:bill_list' %}" class="btn btn-sm btn-light">View All</a>
+          </div>
+          <div class="card-body">
+            {% if unpaid_bills %}
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Vendor</th>
+                      <th>Due Date</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for bill in unpaid_bills %}
+                      <tr>
+                        <td>{{ bill.vendor.name }}</td>
+                        <td>{{ bill.due_date|date:'M d, Y' }}</td>
+                        <td>{{ bill.total_amount|floatformat:2 }}</td>
+                        <td>
+                          <span class="badge {% if bill.is_overdue %}
+                              bg-danger
+                            {% else %}
+                              bg-warning
+                            {% endif %}">
+                            {{ bill.is_overdue|yesno:'Overdue,Unpaid' }}
+                          </span>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p>No unpaid bills found.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Unpaid Invoices</h5>
+            <a href="{% url 'accounting:invoice_list' %}" class="btn btn-sm btn-light">View All</a>
+          </div>
+          <div class="card-body">
+            {% if unpaid_invoices %}
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Customer</th>
+                      <th>Invoice Date</th>
+                      <th>Due Date</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for invoice in unpaid_invoices %}
+                      <tr>
+                        <td>{{ invoice.customer.name }}</td>
+                        <td>{{ invoice.date|date:'M d, Y' }}</td>
+                        <td>{{ invoice.due_date|date:'M d, Y' }}</td>
+                        <td>{{ invoice.total_amount|floatformat:2 }}</td>
+                        <td>
+                          <span class="badge {% if invoice.is_overdue %}
+                              bg-danger
+                            {% else %}
+                              bg-warning
+                            {% endif %}">
+                            {{ invoice.is_overdue|yesno:'Overdue,Unpaid' }}
+                          </span>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p>No unpaid invoices found.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

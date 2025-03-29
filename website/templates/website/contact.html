@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Contact Us | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center">Contact Us</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item">
+                <a href="{% url 'website:home' %}">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form and Information -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row">
+        <!-- Contact Information -->
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h3 class="mb-4">Get In Touch</h3>
+
+              <div class="d-flex mb-4">
+                <div class="me-3">
+                  <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
+                </div>
+                <div>
+                  <h5>Address</h5>
+                  <address class="mb-0">
+                    {% if site_settings.address %}
+                      {{ site_settings.address|linebreaks }}
+                    {% else %}
+                      1234 Main Street<br />
+                      Suite 100<br />
+                      City, State 12345
+                    {% endif %}
+                  </address>
+                </div>
+              </div>
+
+              <div class="d-flex mb-4">
+                <div class="me-3">
+                  <i class="fas fa-phone fa-2x text-primary"></i>
+                </div>
+                <div>
+                  <h5>Phone</h5>
+                  <p class="mb-0">
+                    {% if site_settings.contact_phone %}
+                      {{ site_settings.contact_phone }}
+                    {% else %}
+                      (123) 456-7890
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <div class="d-flex mb-4">
+                <div class="me-3">
+                  <i class="fas fa-envelope fa-2x text-primary"></i>
+                </div>
+                <div>
+                  <h5>Email</h5>
+                  <p class="mb-0">
+                    {% if site_settings.contact_email %}
+                      <a href="mailto:{{ site_settings.contact_email }}">{{ site_settings.contact_email }}</a>
+                    {% else %}
+                      <a href="mailto:contact@example.com">contact@example.com</a>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <div class="d-flex">
+                <div class="me-3">
+                  <i class="fas fa-clock fa-2x text-primary"></i>
+                </div>
+                <div>
+                  <h5>Business Hours</h5>
+                  <p class="mb-0">
+                    {% if site_settings.business_hours %}
+                      {{ site_settings.business_hours|linebreaks }}
+                    {% else %}
+                      Monday - Friday: 9:00 AM - 5:00 PM<br />
+                      Saturday: 10:00 AM - 2:00 PM<br />
+                      Sunday: Closed
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              {% if site_settings.facebook_url or site_settings.twitter_url or site_settings.instagram_url or site_settings.linkedin_url %}
+                <div class="mt-4">
+                  <h5>Follow Us</h5>
+                  <div class="mt-2">
+                    {% if site_settings.facebook_url %}
+                      <a href="{{ site_settings.facebook_url }}" target="_blank" class="me-2"><i class="fab fa-facebook fa-lg"></i></a>
+                    {% endif %}
+
+                    {% if site_settings.twitter_url %}
+                      <a href="{{ site_settings.twitter_url }}" target="_blank" class="me-2"><i class="fab fa-twitter fa-lg"></i></a>
+                    {% endif %}
+
+                    {% if site_settings.instagram_url %}
+                      <a href="{{ site_settings.instagram_url }}" target="_blank" class="me-2"><i class="fab fa-instagram fa-lg"></i></a>
+                    {% endif %}
+
+                    {% if site_settings.linkedin_url %}
+                      <a href="{{ site_settings.linkedin_url }}" target="_blank" class="me-2"><i class="fab fa-linkedin fa-lg"></i></a>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h3 class="mb-4">Send Us a Message</h3>
+
+              {% if messages %}
+                <div class="alert alert-success">
+                  {% for message in messages %}
+                    {{ message }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <form method="post">
+                {% csrf_token %}
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="id_name" class="form-label">Name*</label>
+                    {{ form.name.errors }}
+                    <input type="text" name="name" id="id_name" class="form-control {% if form.name.errors %}is-invalid{% endif %}" required />
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="id_email" class="form-label">Email*</label>
+                    {{ form.email.errors }}
+                    <input type="email" name="email" id="id_email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" required />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="id_subject" class="form-label">Subject*</label>
+                  {{ form.subject.errors }}
+                  <input type="text" name="subject" id="id_subject" class="form-control {% if form.subject.errors %}is-invalid{% endif %}" required />
+                </div>
+
+                <div class="mb-3">
+                  <label for="id_message" class="form-label">Message*</label>
+                  {{ form.message.errors }}
+                  <textarea name="message" id="id_message" rows="5" class="form-control {% if form.message.errors %}is-invalid{% endif %}" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send Message</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+              <div class="ratio ratio-21x9">
+                {% if site_settings.google_maps_embed %}
+                  {{ site_settings.google_maps_embed|safe }}
+                {% else %}
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.3059353029!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1606585868476!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Link -->
+  <section class="py-5">
+    <div class="container text-center">
+      <h3>Have Questions?</h3>
+      <p class="lead mb-4">Check out our Frequently Asked Questions to find quick answers.</p>
+      <a href="{% url 'website:faq' %}" class="btn btn-outline-primary btn-lg">View FAQs</a>
+    </div>
+  </section>
+{% endblock %}

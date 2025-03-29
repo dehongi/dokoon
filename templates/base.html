@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,70 +11,224 @@
       {% endblock %}
     </title>
 
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.min.css" />
 
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+    <style>
+      /* Enhanced styling for better visuals */
+      :root {
+        --primary-color: #3f51b5;
+        --secondary-color: #303f9f;
+        --accent-color: #ff4081;
+        --text-color: #333333;
+        --light-gray: #f8f9fa;
+        --border-color: #e9ecef;
+      }
+      
+      body {
+        font-family: 'Open Sans', sans-serif;
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #f9f9f9;
+      }
+      
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+      }
+      
+      .navbar {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: white !important;
+      }
+      
+      .navbar-brand {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: var(--primary-color) !important;
+      }
+      
+      .navbar .nav-link {
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+      }
+      
+      .navbar .nav-link.active {
+        color: var(--primary-color) !important;
+      }
+      
+      .navbar .nav-link:hover {
+        color: var(--secondary-color) !important;
+      }
+      
+      .dropdown-item:active {
+        background-color: var(--primary-color);
+      }
+      
+      .footer {
+        margin-top: auto;
+        padding: 2.5rem 0;
+        background-color: white;
+        border-top: 1px solid var(--border-color);
+      }
+      
+      .page-header {
+        background-color: white;
+        padding: 2.5rem 0;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+      
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+      }
+      
+      .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+      
+      .btn-primary:hover {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+      }
+      
+      .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+      
+      .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+      
+      .badge.bg-primary {
+        background-color: var(--accent-color) !important;
+      }
+      
+      .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(63, 81, 181, 0.25);
+      }
+      
+      /* Better responsive behavior */
+      @media (max-width: 767.98px) {
+        .footer h5 {
+          margin-top: 1.5rem;
+        }
+      }
+    </style>
 
     {% block head %}
 
     {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-sm">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
       <div class="container">
-        <a class="navbar-brand" href="/">My Store</a>
+        <a class="navbar-brand" href="/"><i class="bi bi-shop me-2"></i>My Store</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'website:home' %}">Home</a>
+              <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'website:home' %}"><i class="bi bi-house-door me-1"></i>Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'shop:product_list' %}">Shop</a>
+              <a class="nav-link {% if '/shop/' in request.path %}active{% endif %}" href="{% url 'shop:product_list' %}"><i class="bi bi-cart3 me-1"></i>Shop</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'accounting:dashboard' %}">Accounting</a>
+              <a class="nav-link {% if '/accounting/' in request.path %}active{% endif %}" href="{% url 'accounting:dashboard' %}"><i class="bi bi-calculator me-1"></i>Accounting</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'inventory:list_products' %}">Inventory</a>
+              <a class="nav-link {% if '/inventory/' in request.path %}active{% endif %}" href="#"><i class="bi bi-box-seam me-1"></i>Inventory</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'procurement:dashboard' %}">Procurement</a>
+              <a class="nav-link {% if '/procurement/' in request.path %}active{% endif %}" href="{% url 'procurement:dashboard' %}"><i class="bi bi-truck me-1"></i>Procurement</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-info-circle me-1"></i>About</a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="{% url 'website:about' %}">About Us</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'website:contact' %}">Contact Us</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'website:faq' %}">FAQ</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'website:help' %}">Help Center</a>
+                </li>
+              </ul>
             </li>
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="#"><i class="bi bi-cart me-1"></i> Cart</a>
+              <a class="nav-link" href="{% url 'shop:cart_detail' %}">
+                <i class="bi bi-cart me-1"></i>Cart
+                <span class="badge bg-primary rounded-pill">0</span>
+              </a>
             </li>
             {% if user.is_authenticated %}
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle me-1"></i> {{ user.username }}</a>
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle me-1"></i>{{ user.username }}</a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                   <li>
-                    <a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a>
+                    <a class="dropdown-item" href="{% url 'users:profile' %}"><i class="bi bi-person me-2"></i>Profile</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'shop:order_history' %}"><i class="bi bi-box2 me-2"></i>My Orders</a>
                   </li>
                   <li>
                     <hr class="dropdown-divider" />
                   </li>
                   <li>
-                    <a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a>
+                    <a class="dropdown-item" href="{% url 'users:logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
                   </li>
                 </ul>
               </li>
             {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                <a class="nav-link" href="{% url 'accounts:login' %}"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:register' %}">Register</a>
+                <a class="nav-link" href="{% url 'accounts:signup' %}"><i class="bi bi-person-plus me-1"></i>Register</a>
               </li>
             {% endif %}
           </ul>
@@ -80,10 +236,23 @@
       </div>
     </nav>
 
+    <!-- Messages/Alerts -->
     <div class="container mt-3">
       {% if messages %}
         {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+            {% if message.tags == 'success' %}
+              <i class="bi bi-check-circle-fill me-2"></i>
+            {% endif %}
+            {% if message.tags == 'info' %}
+              <i class="bi bi-info-circle-fill me-2"></i>
+            {% endif %}
+            {% if message.tags == 'warning' %}
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {% endif %}
+            {% if message.tags == 'error' %}
+              <i class="bi bi-x-circle-fill me-2"></i>
+            {% endif %}
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
@@ -91,35 +260,97 @@
       {% endif %}
     </div>
 
-    <div class="container mt-4">
+    <!-- Main Content Area -->
+    <main class="py-4">
       {% block content %}
 
       {% endblock %}
-    </div>
+    </main>
 
-    <footer class="bg-light py-3 mt-5">
-      <div class="container text-center">
-        <p>
-          &copy; {% now 'Y' %}My E-commerce Store. All rights reserved.
-        </p>
-        <ul class="list-inline">
-          <li class="list-inline-item">
-            <a href="#" class="text-muted">Privacy Policy</a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#" class="text-muted">Terms of Service</a>
-          </li>
-          <li class="list-inline-item">
-            <a href="#" class="text-muted">Contact Us</a>
-          </li>
-        </ul>
+    <!-- Footer -->
+    <footer class="footer mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 mb-4 mb-md-0">
+            <h5 class="mb-3">My E-commerce Store</h5>
+            <p class="text-muted">Quality products for all your needs.</p>
+            <div class="mt-3">
+              <a href="#" class="text-muted me-2 text-decoration-none"><i class="fab fa-facebook fa-lg"></i></a>
+              <a href="#" class="text-muted me-2 text-decoration-none"><i class="fab fa-twitter fa-lg"></i></a>
+              <a href="#" class="text-muted me-2 text-decoration-none"><i class="fab fa-instagram fa-lg"></i></a>
+              <a href="#" class="text-muted text-decoration-none"><i class="fab fa-linkedin fa-lg"></i></a>
+            </div>
+          </div>
+          <div class="col-md-2 mb-4 mb-md-0">
+            <h5 class="mb-3">Quick Links</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a href="{% url 'website:home' %}" class="text-muted text-decoration-none">Home</a>
+              </li>
+              <li class="mb-2">
+                <a href="{% url 'shop:product_list' %}" class="text-muted text-decoration-none">Shop</a>
+              </li>
+              <li class="mb-2">
+                <a href="{% url 'website:about' %}" class="text-muted text-decoration-none">About</a>
+              </li>
+              <li class="mb-2">
+                <a href="{% url 'website:contact' %}" class="text-muted text-decoration-none">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-2 mb-4 mb-md-0">
+            <h5 class="mb-3">Information</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a href="{% url 'website:terms' %}" class="text-muted text-decoration-none">Terms & Conditions</a>
+              </li>
+              <li class="mb-2">
+                <a href="{% url 'website:privacy' %}" class="text-muted text-decoration-none">Privacy Policy</a>
+              </li>
+              <li class="mb-2">
+                <a href="{% url 'website:faq' %}" class="text-muted text-decoration-none">FAQ</a>
+              </li>
+              <li class="mb-2">
+                <a href="{% url 'website:help' %}" class="text-muted text-decoration-none">Help Center</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h5 class="mb-3">Newsletter</h5>
+            <p class="text-muted">Stay updated with our latest offers and products.</p>
+            <form class="mt-3">
+              <div class="input-group">
+                <input type="email" class="form-control" placeholder="Your email" />
+                <button class="btn btn-primary" type="submit">Subscribe</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <hr class="my-4" />
+        <div class="row">
+          <div class="col-md-6">
+            <p class="text-muted mb-0">
+              &copy;{% now 'Y' %}My E-commerce Store. All rights reserved.
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p class="text-muted mb-0">
+              <i class="bi bi-envelope me-1"></i> contact@example.com
+              <span class="mx-2">|</span>
+              <i class="bi bi-telephone me-1"></i> (123) 456-7890
+            </p>
+          </div>
+        </div>
       </div>
     </footer>
 
+    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+    <!-- Custom JavaScript -->
     <script src="{% static 'js/main.js' %}"></script>
 
+    <!-- Page-specific JavaScript -->
     {% block scripts %}
 
     {% endblock %}

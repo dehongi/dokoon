@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Chart of Accounts
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Chart of Accounts</h1>
+      {% if perms.accounting.add_account %}
+        <a href="#" class="btn btn-primary">Add Account</a>
+      {% endif %}
+    </div>
+
+    {% if account_types %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <div class="card-body p-0">
+              <ul class="nav nav-tabs" id="accountTabs" role="tablist">
+                {% for account_type in account_types %}
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if forloop.first %}active{% endif %}"
+                      id="tab-{{ account_type.code }}"
+                      data-bs-toggle="tab"
+                      data-bs-target="#content-{{ account_type.code }}"
+                      type="button"
+                      role="tab"
+                      aria-controls="content-{{ account_type.code }}"
+                      aria-selected="{% if forloop.first %}
+                        true
+                      {% else %}
+                        false
+                      {% endif %}">
+                      {{ account_type.name }}
+                    </button>
+                  </li>
+                {% endfor %}
+              </ul>
+
+              <div class="tab-content" id="accountTabsContent">
+                {% for account_type in account_types %}
+                  <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="content-{{ account_type.code }}" role="tabpanel" aria-labelledby="tab-{{ account_type.code }}">
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Current Balance</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for account in accounts_by_type|get_item:account_type.id %}
+                            <tr class="{% if account.parent_account %}table-row-indent{% endif %}">
+                              <td>{{ account.code }}</td>
+                              <td>
+                                {% if account.parent_account %}
+                                  <span class="ms-3">↳</span>
+                                {% endif %}
+                                {{ account.name }}
+                              </td>
+                              <td>{{ account_type.name }}</td>
+                              <td class="text-end">{{ account.current_balance|floatformat:2 }}</td>
+                              <td>
+                                <a href="{% url 'accounting:account_detail' account.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                                {% if perms.accounting.change_account %}
+                                  <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                {% endif %}
+                              </td>
+                            </tr>
+                          {% empty %}
+                            <tr>
+                              <td colspan="5" class="text-center">No accounts found for this type.</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="alert alert-info">No accounts have been created yet.</div>
+    {% endif %}
+  </div>
+
+  <style>
+    .table-row-indent {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  </style>
+{% endblock %}
